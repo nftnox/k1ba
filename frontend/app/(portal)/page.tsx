@@ -7,6 +7,8 @@ import { HomepageLeaderboard, SidebarRectangle } from "@/components/ui/AdSlot";
 import { TrendingUp, Clock, Star, ArrowRight, Newspaper, MessageCircle } from "lucide-react";
 import type { Article } from "@/types";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "K1.ba – Vijesti iz Bosne i Hercegovine",
   description:

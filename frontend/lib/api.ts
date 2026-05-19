@@ -19,6 +19,7 @@ async function fetchAPI<T>(
   const res = await fetch(`${API_BASE}${path}`, {
     ...options,
     cache: cache || "no-store",
+    signal: options?.signal ?? AbortSignal.timeout(8000),
     headers: {
       "Content-Type": "application/json",
       ...options?.headers,
