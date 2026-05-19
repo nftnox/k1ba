@@ -159,7 +159,7 @@ export default function AdminArticlesPage() {
                       <div className="font-medium line-clamp-2 text-sm leading-snug">
                         {String(article.title)}
                       </div>
-                      {article.sourceUrl && (
+                      {!!article.sourceUrl && (
                         <div className="text-xs text-neutral-400 mt-0.5 flex items-center gap-1">
                           <span className="w-1.5 h-1.5 rounded-full bg-blue-400 inline-block" />
                           {String(article.sourceName || "Auto")}
