@@ -31,7 +31,7 @@ export default async function CategoryPage({ params }: Props) {
     notFound();
   }
 
-  let articles = [];
+  let articles: any[] = [];
   let total = 0;
   try {
     const res = await articlesAPI.getByCategory(slug, 1, 12);
