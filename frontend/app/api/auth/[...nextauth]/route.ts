@@ -47,17 +47,21 @@ const handler = NextAuth({
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.accessToken = (user as Record<string, unknown>).accessToken;
-        token.role = (user as Record<string, unknown>).role;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const u = user as any;
+        token.accessToken = u.accessToken;
+        token.role = u.role;
         token.id = user.id;
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
-        (session as Record<string, unknown>).accessToken = token.accessToken;
-        (session.user as Record<string, unknown>).role = token.role;
-        (session.user as Record<string, unknown>).id = token.id;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const s = session as any;
+        s.accessToken = token.accessToken;
+        (session.user as any).role = token.role;
+        (session.user as any).id = token.id;
       }
       return session;
     },
