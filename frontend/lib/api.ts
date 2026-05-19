@@ -198,4 +198,10 @@ export const adminAPI = {
       method: "POST",
       headers: { Authorization: `Bearer ${token}` },
     }),
+
+  publish: (id: string, token: string) =>
+    fetchAPI<{ message: string }>(`/api/admin/articles/${id}/publish`, {
+      method: "PATCH",
+      headers: { Authorization: `Bearer ${token}` },
+    }),
 };
