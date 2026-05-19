@@ -21,7 +21,7 @@ export default async function TagPage({ params }: Props) {
   const tagName = slug.replace(/-/g, " ");
 
   let articles: any[] = [];
-  let total = 0;
+  let total: number = 0;
 
   try {
     const res = await articlesAPI.getAll({ tag: slug, page: 1, limit: 12 });

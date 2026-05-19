@@ -12,7 +12,7 @@ export const revalidate = 30;
 
 export default async function NajnovijiPage() {
   let articles: any[] = [];
-  let total = 0;
+  let total: number = 0;
 
   try {
     const res = await articlesAPI.getAll({ page: 1, limit: 12, sort: "newest" });

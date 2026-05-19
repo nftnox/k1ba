@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { articlesAPI, categoriesAPI } from "@/lib/api";
 import { ArticleCard } from "@/components/articles/ArticleCard";
@@ -13,11 +13,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   try {
     const category = await categoriesAPI.getBySlug(slug);
     return {
-      title: `${category.name} – K1.ba`,
+      title: `${category.name} â€“ K1.ba`,
       description: category.description || `Vijesti iz kategorije ${category.name} na K1.ba`,
     };
   } catch {
-    return { title: "Kategorija – K1.ba" };
+    return { title: "Kategorija â€“ K1.ba" };
   }
 }
 
@@ -32,7 +32,7 @@ export default async function CategoryPage({ params }: Props) {
   }
 
   let articles: any[] = [];
-  let total = 0;
+  let total: number = 0;
   try {
     const res = await articlesAPI.getByCategory(slug, 1, 12);
     articles = res.data;
