@@ -1,0 +1,167 @@
+version: "3.9"
+
+services:
+  # PostgreSQL baza podataka
+  postgres:
+    image: postgres:16-alpine
+    container_name: k1_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: k1user
+      POSTGRES_PASSWORD: k1pass
+      POSTGRES_DB: k1news
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U k1user -d k1news"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis cache
+  redis:
+    image: redis:7-alpine
+    container_name: k1_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --maxmemory 256mb --maxmemory-policy allkeys-lru
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # Node.js Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: k1_backend
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 8000
+      DATABASE_URL: postgresql://k1user:k1pass@postgres:5432/k1news
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: ${JWT_SECRET:-change-this-in-production-very-long-key}
+      JWT_EXPIRES_IN: 30d
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:3000}
+      SCRAPER_URL: http://scraper:8001
+      SCRAPER_SECRET: ${SCRAPER_SECRET:-scraper-secret}
+    ports:
+      - "8000:8000"
+    volumes:
+      - media_uploads:/app/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Python Scraper servis
+  scraper:
+    build:
+      context: ./scraper
+      dockerfile: Dockerfile
+    container_name: k1_scraper
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://k1user:k1pass@postgres:5432/k1news
+      REDIS_URL: redis://redis:6379
+      BACKEND_URL: http://backend:8000
+      OLLAMA_URL: http://ollama:11434
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-deepseek-r1:7b}
+      SCRAPER_SECRET: ${SCRAPER_SECRET:-scraper-secret}
+      SCRAPE_INTERVAL_MINUTES: ${SCRAPE_INTERVAL:-5}
+    ports:
+      - "8001:8001"
+    volumes:
+      - scraper_media:/app/media
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # Ollama – Lokalni AI
+  ollama:
+    image: ollama/ollama:latest
+    container_name: k1_ollama
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    # GPU support (zakomentiraj ako nemaš GPU)
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities: [gpu]
+
+  # Next.js Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        - NEXT_PUBLIC_APP_URL=${APP_URL:-http://localhost:3000}
+        - NEXT_PUBLIC_BACKEND_API_URL=http://backend:8000
+        - NEXT_PUBLIC_APP_NAME=K1.ba
+    container_name: k1_frontend
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://k1user:k1pass@postgres:5432/k1news
+      REDIS_URL: redis://redis:6379
+      NEXTAUTH_URL: ${APP_URL:-http://localhost:3000}
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET:-change-in-production}
+      BACKEND_API_URL: http://backend:8000
+      NEXT_PUBLIC_BACKEND_API_URL: http://localhost:8000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+  # Nginx reverse proxy (za produkciju)
+  nginx:
+    image: nginx:alpine
+    container_name: k1_nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d:ro
+      - nginx_certs:/etc/nginx/certs
+      - media_uploads:/var/www/media:ro
+    depends_on:
+      - frontend
+      - backend
+    profiles:
+      - production
+
+volumes:
+  postgres_data:
+  redis_data:
+  media_uploads:
+  scraper_media:
+  ollama_data:
+  nginx_certs:
+
+networks:
+  default:
+    name: k1_network

@@ -1,0 +1,275 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --font-inter: "Inter", sans-serif;
+    --font-playfair: "Playfair Display", serif;
+    --font-mono: "JetBrains Mono", monospace;
+
+    --background: 0 0% 100%;
+    --foreground: 0 0% 5%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
+    --border: 0 0% 91%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 5%;
+    --primary: 0 87% 51%;
+    --primary-foreground: 0 0% 100%;
+    --ring: 0 87% 51%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 0 0% 6%;
+    --foreground: 0 0% 95%;
+    --muted: 0 0% 10%;
+    --muted-foreground: 0 0% 60%;
+    --border: 0 0% 14%;
+    --card: 0 0% 8%;
+    --card-foreground: 0 0% 95%;
+    --primary: 0 87% 51%;
+    --primary-foreground: 0 0% 100%;
+  }
+
+  * {
+    @apply border-[hsl(var(--border))];
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-[hsl(var(--background))] text-[hsl(var(--foreground))];
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  ::selection {
+    @apply bg-brand-600/20 text-brand-700;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-neutral-300 dark:bg-neutral-700 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-neutral-400 dark:bg-neutral-600;
+  }
+}
+
+@layer components {
+  .container-news {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .card-news {
+    @apply bg-[hsl(var(--card))] rounded-xl shadow-card hover:shadow-card-hover transition-all duration-300 overflow-hidden;
+  }
+
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold uppercase tracking-wide;
+  }
+
+  .badge-breaking {
+    @apply badge bg-brand-600 text-white animate-pulse-slow;
+  }
+
+  .badge-category {
+    @apply badge bg-brand-50 text-brand-700 dark:bg-brand-950 dark:text-brand-400;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center gap-2 px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-lg transition-all duration-200 active:scale-95;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center gap-2 px-5 py-2.5 bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 text-neutral-900 dark:text-neutral-100 font-semibold rounded-lg transition-all duration-200 active:scale-95;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center gap-2 px-4 py-2 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg transition-all duration-200;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-3 bg-[hsl(var(--muted))] border border-[hsl(var(--border))] rounded-lg text-[hsl(var(--foreground))] placeholder-[hsl(var(--muted-foreground))] focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all duration-200;
+  }
+
+  .section-title {
+    @apply text-2xl font-bold font-serif text-[hsl(var(--foreground))];
+  }
+
+  .section-divider {
+    @apply h-1 w-12 bg-brand-600 rounded-full mb-4;
+  }
+
+  .article-title {
+    @apply font-serif font-bold leading-tight text-[hsl(var(--foreground))] hover:text-brand-600 transition-colors duration-200;
+  }
+
+  .skeleton {
+    @apply animate-pulse bg-gradient-to-r from-neutral-200 via-neutral-100 to-neutral-200 dark:from-neutral-800 dark:via-neutral-700 dark:to-neutral-800 bg-[length:200%_100%] animate-shimmer rounded;
+  }
+
+  .ticker-wrapper {
+    @apply overflow-hidden whitespace-nowrap;
+  }
+
+  .ticker-content {
+    @apply inline-flex animate-ticker;
+  }
+
+  .prose-news {
+    @apply prose prose-lg dark:prose-invert max-w-none
+      prose-headings:font-serif prose-headings:font-bold
+      prose-a:text-brand-600 prose-a:no-underline hover:prose-a:underline
+      prose-img:rounded-xl prose-img:shadow-card
+      prose-blockquote:border-brand-600 prose-blockquote:not-italic
+      prose-code:text-brand-600 prose-code:bg-brand-50 prose-code:px-1 prose-code:rounded;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-pretty {
+    text-wrap: pretty;
+  }
+
+  .line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .line-clamp-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+
+  .line-clamp-4 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+  }
+
+  .gradient-mask-b {
+    -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* Breaking news ticker */
+@keyframes ticker {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Custom animations */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Reading progress bar */
+#reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 3px;
+  background: linear-gradient(90deg, #ed1515, #ff6b6b);
+  z-index: 9999;
+  transition: width 0.1s linear;
+}
+
+/* Mobile safe area – iPhone notch/home indicator */
+.safe-area-inset-bottom {
+  padding-bottom: max(0px, env(safe-area-inset-bottom));
+}
+
+/* Touch scrolling optimization */
+@media (max-width: 768px) {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Bolji touch target za linkove na mobilu */
+  a, button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Sprečava zoom na input focus na iOS */
+  input, textarea, select {
+    font-size: 16px !important;
+  }
+}
+
+/* Smooth scroll samo za korisnika koji nema preferenciju za reduced motion */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    font-size: 12pt;
+    line-height: 1.5;
+  }
+}

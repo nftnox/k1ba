@@ -1,0 +1,265 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String    @id @default(cuid())
+  email       String    @unique
+  name        String
+  password    String?
+  image       String?
+  bio         String?
+  role        UserRole  @default(USER)
+  isActive    Boolean   @default(true)
+  isBanned    Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  comments        Comment[]
+  reactions       ArticleReaction[]
+  commentReactions CommentReaction[]
+  savedArticles   SavedArticle[]
+  reports         Report[]
+  newsletterSubs  NewsletterSubscriber[]
+  articles        Article[]   // <--- OVO DODAJ
+
+  @@map("users")
+}
+
+model Category {
+  id          String    @id @default(cuid())
+  name        String
+  slug        String    @unique
+  description String?
+  color       String?
+  icon        String?
+  sortOrder   Int       @default(0)
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  articles    Article[]
+
+  @@map("categories")
+}
+
+model Tag {
+  id        String    @id @default(cuid())
+  name      String
+  slug      String    @unique
+  createdAt DateTime  @default(now())
+
+  articles  ArticleTag[]
+
+  @@map("tags")
+}
+
+model Article {
+  id                 String         @id @default(cuid())
+  slug               String         @unique
+  title              String
+  excerpt            String         @db.Text
+  content            String         @db.Text
+  featuredImage      String?
+  featuredImageAlt   String?
+  featuredImageLocal String?
+  categoryId         String
+  authorId           String?
+  status             ArticleStatus  @default(DRAFT)
+  isBreaking         Boolean        @default(false)
+  isFeatured         Boolean        @default(false)
+  readingTime        Int            @default(3)
+  viewCount          Int            @default(0)
+  metaTitle          String?
+  metaDescription    String?        @db.Text
+  metaKeywords       String?
+  aiQuality          Int?           @default(0)
+  sourceUrl          String?
+  sourceName         String?
+  sourceHash         String?        @unique
+  aiProcessed        Boolean        @default(false)
+  publishedAt        DateTime?
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+
+  category     Category          @relation(fields: [categoryId], references: [id])
+  author       User?             @relation(fields: [authorId], references: [id])
+  tags         ArticleTag[]
+  comments     Comment[]
+  reactions    ArticleReaction[]
+  views        ArticleView[]
+  savedBy      SavedArticle[]
+
+  @@index([status, publishedAt])
+  @@index([categoryId])
+  @@index([isBreaking])
+  @@index([isFeatured])
+  @@index([viewCount])
+  @@map("articles")
+}
+
+model ArticleTag {
+  articleId String
+  tagId     String
+
+  article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  tag       Tag     @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([articleId, tagId])
+  @@map("article_tags")
+}
+
+model Comment {
+  id          String    @id @default(cuid())
+  content     String    @db.Text
+  articleId   String
+  authorId    String
+  parentId    String?
+  isApproved  Boolean   @default(true)
+  isDeleted   Boolean   @default(false)
+  reportCount Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  article   Article          @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  author    User             @relation(fields: [authorId], references: [id])
+  parent    Comment?         @relation("CommentReplies", fields: [parentId], references: [id])
+  replies   Comment[]        @relation("CommentReplies")
+  reactions CommentReaction[]
+  reports   Report[]
+
+  @@index([articleId, isApproved])
+  @@map("comments")
+}
+
+model ArticleReaction {
+  id        String       @id @default(cuid())
+  type      ReactionType
+  articleId String
+  userId    String
+  createdAt DateTime     @default(now())
+
+  article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([articleId, userId])
+  @@map("article_reactions")
+}
+
+model CommentReaction {
+  id        String       @id @default(cuid())
+  type      ReactionType
+  commentId String
+  userId    String
+  createdAt DateTime     @default(now())
+
+  comment   Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([commentId, userId])
+  @@map("comment_reactions")
+}
+
+model ArticleView {
+  id        String   @id @default(cuid())
+  articleId String
+  ip        String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  @@index([articleId, createdAt])
+  @@map("article_views")
+}
+
+model SavedArticle {
+  userId    String
+  articleId String
+  createdAt DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  article Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  @@id([userId, articleId])
+  @@map("saved_articles")
+}
+
+model Report {
+  id        String     @id @default(cuid())
+  reason    String
+  userId    String
+  commentId String?
+  articleId String?
+  status    ReportStatus @default(PENDING)
+  createdAt DateTime   @default(now())
+
+  user      User      @relation(fields: [userId], references: [id])
+  comment   Comment?  @relation(fields: [commentId], references: [id])
+
+  @@map("reports")
+}
+
+model NewsletterSubscriber {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  userId    String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  user      User?    @relation(fields: [userId], references: [id])
+
+  @@map("newsletter_subscribers")
+}
+
+model ScraperLog {
+  id                 String      @id @default(cuid())
+  source             String
+  status             LogStatus   @default(RUNNING)
+  articlesFound      Int         @default(0)
+  articlesProcessed  Int         @default(0)
+  errors             String[]
+  startedAt          DateTime    @default(now())
+  completedAt        DateTime?
+
+  @@map("scraper_logs")
+}
+
+enum UserRole {
+  USER
+  MODERATOR
+  ADMIN
+}
+
+enum ArticleStatus {
+  DRAFT
+  PENDING
+  PUBLISHED
+  ARCHIVED
+}
+
+enum ReactionType {
+  LIKE
+  DISLIKE
+  LOVE
+  ANGRY
+  SAD
+}
+
+enum ReportStatus {
+  PENDING
+  REVIEWED
+  RESOLVED
+  DISMISSED
+}
+
+enum LogStatus {
+  RUNNING
+  SUCCESS
+  FAILED
+}

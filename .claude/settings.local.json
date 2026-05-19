@@ -1,0 +1,33 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p \"C:\\\\Users\\\\nordin.hodzic\\\\Desktop\\\\K1\\\\frontend\\\\app\\\\\\(portal\\)\\\\kategorije\\\\[slug]\")",
+      "Bash(mkdir -p \"C:\\\\Users\\\\nordin.hodzic\\\\Desktop\\\\K1\\\\frontend\\\\app\\\\\\(portal\\)\\\\vijest\\\\[slug]\")",
+      "Bash(mkdir -p \"C:\\\\Users\\\\nordin.hodzic\\\\Desktop\\\\K1\\\\frontend\\\\app\\\\\\(portal\\)\\\\pretraga\")",
+      "Bash(mkdir -p \"C:\\\\Users\\\\nordin.hodzic\\\\Desktop\\\\K1\\\\frontend\\\\app\\\\\\(portal\\)\\\\trending\")",
+      "Bash(mkdir -p \"C:\\\\Users\\\\nordin.hodzic\\\\Desktop\\\\K1\\\\frontend\\\\app\\\\\\(portal\\)\\\\najnovije\")",
+      "Bash(mkdir -p \"C:\\\\Users\\\\nordin.hodzic\\\\Desktop\\\\K1\\\\frontend\\\\components\\\\layout\")",
+      "Bash(mkdir -p \"C:\\\\Users\\\\nordin.hodzic\\\\Desktop\\\\K1\\\\frontend\\\\components\\\\articles\")",
+      "Bash(mkdir -p \"C:\\\\Users\\\\nordin.hodzic\\\\Desktop\\\\K1\\\\frontend\\\\components\\\\comments\")",
+      "Bash(mkdir -p \"C:\\\\Users\\\\nordin.hodzic\\\\Desktop\\\\K1\\\\frontend\\\\components\\\\ui\")",
+      "Bash(mkdir -p \"C:\\\\Users\\\\nordin.hodzic\\\\Desktop\\\\K1\\\\frontend\\\\components\\\\admin\")",
+      "Bash(mkdir -p \"C:\\\\Users\\\\nordin.hodzic\\\\Desktop\\\\K1\\\\backend\\\\src\\\\controllers\")",
+      "Bash(mkdir -p \"C:\\\\Users\\\\nordin.hodzic\\\\Desktop\\\\K1\\\\backend\\\\src\\\\routes\")",
+      "Bash(mkdir -p \"C:\\\\Users\\\\nordin.hodzic\\\\Desktop\\\\K1\\\\backend\\\\src\\\\middleware\")",
+      "Bash(mkdir -p \"C:\\\\Users\\\\nordin.hodzic\\\\Desktop\\\\K1\\\\backend\\\\src\\\\services\")",
+      "Bash(mkdir -p \"C:\\\\Users\\\\nordin.hodzic\\\\Desktop\\\\K1\\\\backend\\\\src\\\\utils\")",
+      "WebFetch(domain:n1info.ba)",
+      "WebFetch(domain:avaz.ba)",
+      "WebFetch(domain:www.klix.ba)",
+      "Bash(pip install *)",
+      "Bash(pip show *)",
+      "Bash(python -c ' *)",
+      "Bash(python *)",
+      "Bash(Test-Path \"C:\\\\Users\\\\nordin.hodzic\\\\Desktop\\\\K1\\\\.git\")",
+      "Bash(Test-Path \"C:\\\\Users\\\\nordin.hodzic\\\\Desktop\\\\K1\\\\.gitignore\")",
+      "Bash(Test-Path \"C:\\\\Users\\\\nordin.hodzic\\\\Desktop\\\\K1\\\\scraper\\\\.env\")",
+      "Bash(Test-Path \"C:\\\\Users\\\\nordin.hodzic\\\\Desktop\\\\K1\\\\backend\\\\.env\")",
+      "Bash(Test-Path \"C:\\\\Users\\\\nordin.hodzic\\\\Desktop\\\\K1\\\\frontend\\\\.env\")"
+    ]
+  }
+}
