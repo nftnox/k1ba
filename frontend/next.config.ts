@@ -17,9 +17,7 @@ const nextConfig: NextConfig = {
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
   output: process.env.BUILD_STANDALONE === "true" ? "standalone" : undefined,
-  experimental: {
-    optimizeCss: true,
-  },
+  experimental: {},
   compress: true,
   poweredByHeader: false,
   async headers() {
