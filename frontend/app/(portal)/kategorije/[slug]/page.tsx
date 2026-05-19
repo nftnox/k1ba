@@ -13,11 +13,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   try {
     const category = await categoriesAPI.getBySlug(slug);
     return {
-      title: `${category.name} â€“ K1.ba`,
+      title: `${category.name} – K1.ba`,
       description: category.description || `Vijesti iz kategorije ${category.name} na K1.ba`,
     };
   } catch {
-    return { title: "Kategorija â€“ K1.ba" };
+    return { title: “Kategorija – K1.ba” };
   }
 }
 

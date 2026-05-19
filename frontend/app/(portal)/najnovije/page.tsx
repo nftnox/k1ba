@@ -4,8 +4,8 @@ import { articlesAPI } from "@/lib/api";
 import { ArticleGrid } from "@/components/articles/ArticleGrid";
 
 export const metadata: Metadata = {
-  title: "Najnovije vijesti â€“ K1.ba",
-  description: "NajsvjeĹľije i najnovije vijesti iz BiH i regiona na K1.ba",
+  title: “Najnovije vijesti – K1.ba”,
+  description: “Najsvježije i najnovije vijesti iz BiH i regiona na K1.ba”,
 };
 
 export const revalidate = 30;
@@ -31,7 +31,7 @@ export default async function NajnovijiPage() {
           Najnovije vijesti
         </h1>
         <p className="text-neutral-500 mt-2">
-          SvjeĹľe vijesti â€“ aĹľurirano svakih nekoliko minuta
+          Svježe vijesti – ažurirano svakih nekoliko minuta
         </p>
       </div>
 

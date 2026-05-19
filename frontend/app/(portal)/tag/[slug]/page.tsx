@@ -11,7 +11,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const tag = slug.replace(/-/g, " ");
   return {
-    title: `#${tag} â€“ K1.ba`,
+    title: `#${tag} – K1.ba`,
     description: `Vijesti sa tagom "${tag}" na K1.ba`,
   };
 }

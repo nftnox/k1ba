@@ -4,7 +4,7 @@ import { articlesAPI } from "@/lib/api";
 import { ArticleCard } from "@/components/articles/ArticleCard";
 
 export const metadata: Metadata = {
-  title: "Popularno â€“ K1.ba",
+  title: “Popularno – K1.ba”,
   description: "Najpopularnije vijesti prema broju pregleda na K1.ba",
 };
 
@@ -27,7 +27,7 @@ export default async function PopularnoPage() {
           <BarChart2 size={32} className="text-brand-600" />
           Popularno
         </h1>
-        <p className="text-neutral-500 mt-2">Vijesti koje ÄŤita najviĹˇe ÄŤitalaca</p>
+        <p className="text-neutral-500 mt-2">Vijesti koje čita najviše čitalaca</p>
       </div>
 
       {articles.length > 0 ? (
