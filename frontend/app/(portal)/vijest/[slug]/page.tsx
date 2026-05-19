@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -52,7 +52,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       },
     };
   } catch {
-    return { title: "Vijest nije pronađena" };
+    return { title: "Vijest nije pronaÄ‘ena" };
   }
 }
 
@@ -69,7 +69,7 @@ export default async function ArticlePage({ params }: Props) {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://k1.ba";
   const articleUrl = `${appUrl}/vijest/${slug}`;
 
-  let relatedArticles = [];
+  let relatedArticles: any[] = [];
   try {
     relatedArticles = await articlesAPI.getRelated(article.id, 4);
   } catch {
@@ -114,7 +114,7 @@ export default async function ArticlePage({ params }: Props) {
           <div className="lg:col-span-8">
             {/* Breadcrumb */}
             <nav className="flex items-center gap-2 text-sm text-neutral-400 mb-6" aria-label="Breadcrumb">
-              <Link href="/" className="hover:text-brand-600 transition-colors">Početna</Link>
+              <Link href="/" className="hover:text-brand-600 transition-colors">PoÄŤetna</Link>
               <span>/</span>
               <Link
                 href={`/kategorije/${article.category.slug}`}
@@ -167,7 +167,7 @@ export default async function ArticlePage({ params }: Props) {
               </div>
               <div className="flex items-center gap-1.5">
                 <Clock size={14} />
-                <span>{article.readingTime} min čitanja</span>
+                <span>{article.readingTime} min ÄŤitanja</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <Eye size={14} />
@@ -201,10 +201,10 @@ export default async function ArticlePage({ params }: Props) {
               dangerouslySetInnerHTML={{ __html: article.content }}
             />
 
-            {/* Inline ad – poslije sadržaja */}
+            {/* Inline ad â€“ poslije sadrĹľaja */}
             <ArticleInlineAd slot="article-after-content" />
 
-            {/* Tags – sada vode na /tag/slug */}
+            {/* Tags â€“ sada vode na /tag/slug */}
             {article.tags && article.tags.length > 0 && (
               <div className="flex items-center gap-2 flex-wrap mt-6 pt-6 border-t border-[hsl(var(--border))]">
                 <Tag size={14} className="text-neutral-400" />
@@ -263,7 +263,7 @@ export default async function ArticlePage({ params }: Props) {
                     href={`/kategorije/${article.category.slug}`}
                     className="font-bold text-base hover:text-brand-600 transition-colors"
                   >
-                    Više iz {article.category.name} →
+                    ViĹˇe iz {article.category.name} â†’
                   </Link>
                 </div>
               </div>

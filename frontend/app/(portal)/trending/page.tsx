@@ -1,17 +1,17 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { TrendingUp } from "lucide-react";
 import { articlesAPI } from "@/lib/api";
 import { ArticleCard } from "@/components/articles/ArticleCard";
 
 export const metadata: Metadata = {
-  title: "Trending vijesti – K1.ba",
+  title: "Trending vijesti â€“ K1.ba",
   description: "Najpopularnije i najtrendiranije vijesti na K1.ba",
 };
 
 export const revalidate = 300;
 
 export default async function TrendingPage() {
-  let articles = [];
+  let articles: any[] = [];
   try {
     articles = await articlesAPI.getTrending(30);
   } catch {
@@ -26,7 +26,7 @@ export default async function TrendingPage() {
           <TrendingUp size={32} className="text-brand-600" />
           Trending vijesti
         </h1>
-        <p className="text-neutral-500 mt-2">Najčitanije vijesti u posljednjih 24 sata</p>
+        <p className="text-neutral-500 mt-2">NajÄŤitanije vijesti u posljednjih 24 sata</p>
       </div>
 
       {articles.length > 0 ? (

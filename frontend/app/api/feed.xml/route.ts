@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 import { articlesAPI } from "@/lib/api";
 import { getImageUrl } from "@/lib/utils";
 
@@ -6,7 +6,7 @@ export async function GET() {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://k1.ba";
   const appName = process.env.NEXT_PUBLIC_APP_NAME || "K1.ba";
 
-  let articles = [];
+  let articles: any[] = [];
   try {
     const res = await articlesAPI.getAll({ page: 1, limit: 50, sort: "newest" });
     articles = res.data;
@@ -30,9 +30,9 @@ export async function GET() {
   const feed = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/">
   <channel>
-    <title>${appName} – Vijesti</title>
+    <title>${appName} â€“ Vijesti</title>
     <link>${appUrl}</link>
-    <description>Najbrži news portal u Bosni i Hercegovini</description>
+    <description>NajbrĹľi news portal u Bosni i Hercegovini</description>
     <language>bs</language>
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
     <atom:link href="${appUrl}/feed.xml" rel="self" type="application/rss+xml"/>

@@ -1,17 +1,17 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { BarChart2 } from "lucide-react";
 import { articlesAPI } from "@/lib/api";
 import { ArticleCard } from "@/components/articles/ArticleCard";
 
 export const metadata: Metadata = {
-  title: "Popularno – K1.ba",
+  title: "Popularno â€“ K1.ba",
   description: "Najpopularnije vijesti prema broju pregleda na K1.ba",
 };
 
 export const revalidate = 600;
 
 export default async function PopularnoPage() {
-  let articles = [];
+  let articles: any[] = [];
   try {
     const res = await articlesAPI.getAll({ sort: "popular", page: 1, limit: 30 });
     articles = res.data;
@@ -27,7 +27,7 @@ export default async function PopularnoPage() {
           <BarChart2 size={32} className="text-brand-600" />
           Popularno
         </h1>
-        <p className="text-neutral-500 mt-2">Vijesti koje čita najviše čitalaca</p>
+        <p className="text-neutral-500 mt-2">Vijesti koje ÄŤita najviĹˇe ÄŤitalaca</p>
       </div>
 
       {articles.length > 0 ? (

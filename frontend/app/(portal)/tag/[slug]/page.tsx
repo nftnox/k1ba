@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { Tag } from "lucide-react";
 import { articlesAPI } from "@/lib/api";
 import { ArticleGrid } from "@/components/articles/ArticleGrid";
@@ -11,7 +11,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const tag = slug.replace(/-/g, " ");
   return {
-    title: `#${tag} – K1.ba`,
+    title: `#${tag} â€“ K1.ba`,
     description: `Vijesti sa tagom "${tag}" na K1.ba`,
   };
 }
@@ -20,7 +20,7 @@ export default async function TagPage({ params }: Props) {
   const { slug } = await params;
   const tagName = slug.replace(/-/g, " ");
 
-  let articles = [];
+  let articles: any[] = [];
   let total = 0;
 
   try {
