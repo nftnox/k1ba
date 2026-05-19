@@ -9,7 +9,7 @@ export default async function PortalLayout({
 }: {
   children: React.ReactNode;
 }) {
-  let breakingArticles = [];
+  let breakingArticles: any[] = [];
   try {
     breakingArticles = await articlesAPI.getBreaking();
   } catch {
