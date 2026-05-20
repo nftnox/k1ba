@@ -191,7 +191,7 @@ articlesRouter.get("/:id/related", async (req: Request, res: Response) => {
       where: {
         categoryId: article.categoryId,
         status: "PUBLISHED",
-        id: { not: req.params.id },
+        id: { not: String(req.params.id) },
       },
       orderBy: { publishedAt: "desc" },
       take: parseInt(String(req.query.limit)) || 5,
@@ -208,16 +208,17 @@ articlesRouter.get("/:id/related", async (req: Request, res: Response) => {
 articlesRouter.post("/:id/view", async (req: Request, res: Response) => {
   try {
     const ip = req.ip || req.headers["x-forwarded-for"]?.toString();
+    const viewArticleId = String(req.params.id);
     await prisma.$transaction([
       prisma.articleView.create({
         data: {
-          articleId: req.params.id,
+          articleId: viewArticleId,
           ip: ip?.substring(0, 45),
           userAgent: req.headers["user-agent"]?.substring(0, 200),
         },
       }),
       prisma.article.update({
-        where: { id: req.params.id },
+        where: { id: viewArticleId },
         data: { viewCount: { increment: 1 } },
       }),
     ]);

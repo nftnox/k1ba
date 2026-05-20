@@ -107,24 +107,25 @@ commentsRouter.post("/:id/react", authenticate, async (req: AuthRequest, res: Re
       return res.status(400).json({ error: "Nevažeći tip reakcije" });
     }
 
+    const commentId = String(req.params.id);
     const existing = await prisma.commentReaction.findUnique({
-      where: { commentId_userId: { commentId: req.params.id, userId: req.user!.id } },
+      where: { commentId_userId: { commentId, userId: req.user!.id } },
     });
 
     if (existing) {
       if (existing.type === type) {
         await prisma.commentReaction.delete({
-          where: { commentId_userId: { commentId: req.params.id, userId: req.user!.id } },
+          where: { commentId_userId: { commentId, userId: req.user!.id } },
         });
       } else {
         await prisma.commentReaction.update({
-          where: { commentId_userId: { commentId: req.params.id, userId: req.user!.id } },
+          where: { commentId_userId: { commentId, userId: req.user!.id } },
           data: { type },
         });
       }
     } else {
       await prisma.commentReaction.create({
-        data: { commentId: req.params.id, userId: req.user!.id, type },
+        data: { commentId, userId: req.user!.id, type },
       });
     }
 
@@ -137,12 +138,13 @@ commentsRouter.post("/:id/react", authenticate, async (req: AuthRequest, res: Re
 commentsRouter.post("/:id/report", authenticate, async (req: AuthRequest, res: Response) => {
   try {
     const { reason } = req.body;
+    const reportCommentId = String(req.params.id);
     await prisma.$transaction([
       prisma.report.create({
-        data: { commentId: req.params.id, userId: req.user!.id, reason: reason || "spam" },
+        data: { commentId: reportCommentId, userId: req.user!.id, reason: String(reason || "spam") },
       }),
       prisma.comment.update({
-        where: { id: req.params.id },
+        where: { id: reportCommentId },
         data: { reportCount: { increment: 1 } },
       }),
     ]);

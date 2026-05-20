@@ -140,8 +140,9 @@ adminRouter.put("/articles/:id", requireModerator, async (req: AuthRequest, res:
     const { title, excerpt, content, featuredImage, isBreaking, isFeatured,
       metaTitle, metaDescription, metaKeywords, categoryId, status } = req.body;
 
+    const articleId = String(req.params.id);
     const article = await prisma.article.update({
-      where: { id: req.params.id },
+      where: { id: articleId },
       data: {
         title,
         excerpt,
@@ -158,7 +159,7 @@ adminRouter.put("/articles/:id", requireModerator, async (req: AuthRequest, res:
         publishedAt:
           status === "PUBLISHED"
             ? await prisma.article
-                .findUnique({ where: { id: req.params.id }, select: { publishedAt: true } })
+                .findUnique({ where: { id: articleId }, select: { publishedAt: true } })
                 .then((a) => a?.publishedAt || new Date())
             : undefined,
       },
@@ -175,7 +176,7 @@ adminRouter.put("/articles/:id", requireModerator, async (req: AuthRequest, res:
 adminRouter.post("/articles/:id/publish", requireModerator, async (req: AuthRequest, res: Response) => {
   try {
     const article = await prisma.article.update({
-      where: { id: req.params.id },
+      where: { id: String(req.params.id) },
       data: { status: "PUBLISHED", publishedAt: new Date() },
     });
     await cacheDelPattern("articles:*");
@@ -188,7 +189,7 @@ adminRouter.post("/articles/:id/publish", requireModerator, async (req: AuthRequ
 adminRouter.delete("/articles/:id", requireModerator, async (req: AuthRequest, res: Response) => {
   try {
     const article = await prisma.article.update({
-      where: { id: req.params.id },
+      where: { id: String(req.params.id) },
       data: { status: "ARCHIVED" },
     });
     await cacheDelPattern("articles:*");
@@ -218,7 +219,7 @@ adminRouter.get("/comments/pending", requireModerator, async (_req, res: Respons
 adminRouter.post("/comments/:id/approve", requireModerator, async (req, res: Response) => {
   try {
     await prisma.comment.update({
-      where: { id: req.params.id },
+      where: { id: String(req.params.id) },
       data: { isApproved: true },
     });
     res.json({ message: "Komentar odobren" });
@@ -230,7 +231,7 @@ adminRouter.post("/comments/:id/approve", requireModerator, async (req, res: Res
 adminRouter.delete("/comments/:id", requireModerator, async (req, res: Response) => {
   try {
     await prisma.comment.update({
-      where: { id: req.params.id },
+      where: { id: String(req.params.id) },
       data: { isDeleted: true },
     });
     res.json({ message: "Komentar obrisan" });

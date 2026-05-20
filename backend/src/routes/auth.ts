@@ -29,10 +29,11 @@ authRouter.post("/register", async (req: Request, res: Response) => {
       select: { id: true, name: true, email: true, image: true, role: true },
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const token = jwt.sign(
       { id: user.id, email: user.email, role: user.role },
       process.env.JWT_SECRET!,
-      { expiresIn: (process.env.JWT_EXPIRES_IN || "30d") as any }
+      { expiresIn: "30d" } as any
     );
 
     res.status(201).json({ token, user });
@@ -76,10 +77,11 @@ authRouter.post("/login", async (req: Request, res: Response) => {
       return res.status(401).json({ error: "Pogrešni podaci za prijavu" });
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const token = jwt.sign(
       { id: user.id, email: user.email, role: user.role },
       process.env.JWT_SECRET!,
-      { expiresIn: (process.env.JWT_EXPIRES_IN || "30d") as any }
+      { expiresIn: "30d" } as any
     );
 
     const { password: _, ...safeUser } = user;
