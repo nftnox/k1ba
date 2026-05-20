@@ -227,7 +227,8 @@ articlesRouter.post("/:id/view", async (req: Request, res: Response) => {
   }
 });
 
-function transformArticle(article: Record<string, unknown>) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function transformArticle(article: any) {
   const tags = (article.tags as Array<{ tag: unknown }>) || [];
   return {
     ...article,

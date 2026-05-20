@@ -32,7 +32,7 @@ authRouter.post("/register", async (req: Request, res: Response) => {
     const token = jwt.sign(
       { id: user.id, email: user.email, role: user.role },
       process.env.JWT_SECRET!,
-      { expiresIn: process.env.JWT_EXPIRES_IN || "30d" }
+      { expiresIn: (process.env.JWT_EXPIRES_IN || "30d") as any }
     );
 
     res.status(201).json({ token, user });
@@ -79,7 +79,7 @@ authRouter.post("/login", async (req: Request, res: Response) => {
     const token = jwt.sign(
       { id: user.id, email: user.email, role: user.role },
       process.env.JWT_SECRET!,
-      { expiresIn: process.env.JWT_EXPIRES_IN || "30d" }
+      { expiresIn: (process.env.JWT_EXPIRES_IN || "30d") as any }
     );
 
     const { password: _, ...safeUser } = user;
